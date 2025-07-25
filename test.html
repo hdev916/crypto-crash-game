@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Crypto Crash Game</title>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background: #1a1a1a;
+      color: white;
+    }
+    input, button {
+      padding: 8px;
+      margin: 5px;
+      font-size: 16px;
+    }
+    .multiplier {
+      font-size: 48px;
+      font-weight: bold;
+      color: lime;
+      margin: 30px 0;
+    }
+    .crashed {
+      color: red;
+    }
+    #balance-section {
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🪙 Crypto Crash Game</h1>
+
+  <div>
+    <h3>Create Wallet</h3>
+    <input id="username" placeholder="Username" />
+    <input id="btc" placeholder="BTC" type="number" />
+    <input id="eth" placeholder="ETH" type="number" />
+    <button onclick="createWallet()">Create</button>
+  </div>
+
+  <div id="player-info" style="margin-top: 10px;"></div>
+
+  <div class="multiplier" id="multiplier">Waiting...</div>
+  <button id="cashoutBtn" onclick="cashOut()" disabled>💸 Cash Out</button>
+
+  <div id="crash-message"></div>
+
+  <div id="balance-section">
+    <h3>💼 Wallet Balance</h3>
+    <button onclick="checkBalance()">Check Balance</button>
+    <pre id="balance-output"></pre>
+  </div>
+
+  <script>
+    let socket;
+    let playerId;
+    let hasCashedOut = false;
+
+    const backendUrl = 'http://localhost:5000';
+
+    async function createWallet() {
+      const username = document.getElementById('username').value;
+      const BTC = parseFloat(document.getElementById('btc').value);
+      const ETH = parseFloat(document.getElementById('eth').value);
+
+      const res = await fetch(`${backendUrl}/api/wallet/create`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, wallet: { BTC, ETH } })
+      });
+
+      const data = await res.json();
+      playerId = data.player._id;
+      console.log()
+      document.getElementById('player-info').innerText = `Welcome ${username}, ID: ${playerId}`;
+      startSocket();
+    }
+
+    function startSocket() {
+      socket = io(backendUrl);
+      document.getElementById('multiplier').innerText = 'Waiting for round...';
+
+      socket.on('roundStart', (data) => {
+        document.getElementById('multiplier').innerText = '1.00x';
+        document.getElementById('crash-message').innerText = '';
+        hasCashedOut = false;
+        document.getElementById('cashoutBtn').disabled = false;
+      });
+
+      socket.on('multiplierUpdate', (data) => {
+        if (!hasCashedOut) {
+          document.getElementById('multiplier').innerText = `${data.multiplier}x`;
+        }
+      });
+
+      socket.on('roundCrash', (data) => {
+        document.getElementById('multiplier').classList.add('crashed');
+        document.getElementById('crash-message').innerText = `💥 Crashed at ${data.crashPoint.toFixed(2)}x`;
+        document.getElementById('cashoutBtn').disabled = true;
+      });
+    }
+
+    function cashOut() {
+      if (socket && !hasCashedOut) {
+        socket.emit('cashout', { playerId });
+        hasCashedOut = true;
+        document.getElementById('cashoutBtn').disabled = true;
+        document.getElementById('crash-message').innerText = '✅ You cashed out!';
+      }
+    }
+
+    async function checkBalance() {
+      if (!playerId) {
+        alert("Create a wallet first!");
+        return;
+      }
+
+      const res = await fetch(`${backendUrl}/api/wallet/balance/${playerId}`);
+      const data = await res.json();
+
+      document.getElementById('balance-output').innerText = JSON.stringify(data, null, 2);
+    }
+  </script>
+</body>
+</html>
