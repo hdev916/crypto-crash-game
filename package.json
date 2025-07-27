@@ -2,9 +2,7 @@
   "name": "y",
   "version": "1.0.0",
   "description": "crypto-crash-game",
-  "keywords": [
-    "CRYPTO"
-  ],
+  "keywords": ["CRYPTO"],
   "homepage": "https://github.com/hdev916/crypto-crash-game#readme",
   "bugs": {
     "url": "https://github.com/hdev916/crypto-crash-game/issues"
@@ -18,6 +16,6 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "start"
+    "start": "node index.js"
   }
 }
