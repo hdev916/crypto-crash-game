@@ -19,7 +19,7 @@
   "license": "ISC",
   "author": "harsh-dev",
   "type": "commonjs",
-  "main": "index.js",
+  "main": "script.js",
   "scripts": {
     "start": "node script.js"
   },
