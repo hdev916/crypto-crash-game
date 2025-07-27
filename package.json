@@ -20,37 +20,11 @@
   "main": "index.js",
   "scripts": {
     "start": "node script.js"
-  }
-}
-
-{
-  "name": "y",
-  "version": "1.0.0",
-  "description": "crypto-crash-game",
-  "keywords": [
-    "CRYPTO"
-  ],
-  "homepage": "https://github.com/hdev916/crypto-crash-game#readme",
-  "bugs": {
-    "url": "https://github.com/hdev916/crypto-crash-game/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/hdev916/crypto-crash-game.git"
-  },
-  "license": "ISC",
-  "author": "harsh-dev",
-  "type": "commonjs",
-  "main": "index.js",
-  "scripts": {
-    "test": "start"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "socket.io": "^4.7.2",
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.1",
     "express": "^5.1.0",
-    "socket.io": "^4.8.1"
+    "socket.io": "^4.8.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1"
   }
 }
