@@ -16,6 +16,6 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node script.js"
   }
 }
