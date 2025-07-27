@@ -8,6 +8,9 @@ app.use(cors());
 
 connectDB();
 app.use(express.json());
+app.get('/', (req, res) => {
+  res.redirect('https://68866fd324df1b00080110c9--crypto-ceash12.netlify.app/'); // replace with actual link
+});
 
 
 const gameRoutes = require('./routes/gameRoutes');
