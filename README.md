@@ -59,7 +59,7 @@ Make sure MongoDB is running locally on mongodb://localhost:27017/crashGame.
 3. Start the Server
 bash
 Copy code
-node index.js
+node scrips.js
 You should see:
 
 nginx
